@@ -1,0 +1,191 @@
+{
+  "name": "Reddit technews → Discord",
+  "nodes": [
+    {
+      "id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a1b2c3d4-0002-0002-0002-000000000002",
+      "name": "Get r/technews Posts",
+      "type": "n8n-nodes-base.reddit",
+      "typeVersion": 1,
+      "position": [460, 300],
+      "parameters": {
+        "resource": "post",
+        "operation": "getAll",
+        "subreddit": "technews",
+        "returnAll": false,
+        "limit": 5,
+        "additionalFields": {
+          "after": "",
+          "before": "",
+          "includeCategories": false
+        }
+      },
+      "credentials": {
+        "redditOAuth2Api": {
+          "id": "REPLACE_WITH_REDDIT_CREDENTIAL_ID",
+          "name": "Reddit OAuth2"
+        }
+      }
+    },
+    {
+      "id": "a1b2c3d4-0003-0003-0003-000000000003",
+      "name": "Format Discord Message",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [680, 300],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-title",
+              "name": "title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "field-url",
+              "name": "url",
+              "value": "={{ $json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "field-score",
+              "name": "score",
+              "value": "={{ $json.score }}",
+              "type": "number"
+            },
+            {
+              "id": "field-permalink",
+              "name": "permalink",
+              "value": "=https://reddit.com{{ $json.permalink }}",
+              "type": "string"
+            },
+            {
+              "id": "field-author",
+              "name": "author",
+              "value": "={{ $json.author }}",
+              "type": "string"
+            },
+            {
+              "id": "field-num_comments",
+              "name": "num_comments",
+              "value": "={{ $json.num_comments }}",
+              "type": "number"
+            },
+            {
+              "id": "field-message",
+              "name": "discordMessage",
+              "value": "=**{{ $json.title }}**\n\n{{ $json.url }}\n\n> Posted by u/{{ $json.author }} | {{ $json.score }} upvotes | {{ $json.num_comments }} comments\n> https://reddit.com{{ $json.permalink }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a1b2c3d4-0004-0004-0004-000000000004",
+      "name": "Send to Discord",
+      "type": "n8n-nodes-base.discord",
+      "typeVersion": 2,
+      "position": [900, 300],
+      "parameters": {
+        "operation": "sendMessage",
+        "resource": "message",
+        "guildId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_SERVER_ID",
+          "mode": "id"
+        },
+        "channelId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_CHANNEL_ID",
+          "mode": "id"
+        },
+        "content": "={{ $json.discordMessage }}",
+        "options": {}
+      },
+      "credentials": {
+        "discordBotApi": {
+          "id": "REPLACE_WITH_DISCORD_CREDENTIAL_ID",
+          "name": "Discord Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get r/technews Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get r/technews Posts": {
+      "main": [
+        [
+          {
+            "node": "Format Discord Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Discord Message": {
+      "main": [
+        [
+          {
+            "node": "Send to Discord",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": ""
+  },
+  "pinData": {},
+  "versionId": "a1b2c3d4-ffff-ffff-ffff-000000000000",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2026-03-30T00:00:00.000Z",
+      "updatedAt": "2026-03-30T00:00:00.000Z",
+      "id": "tag-reddit-discord",
+      "name": "reddit-discord"
+    }
+  ]
+}
