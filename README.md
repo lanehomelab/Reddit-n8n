@@ -8,8 +8,7 @@ No Reddit credentials required — uses Reddit's public JSON API.
 
 ```
 Schedule Trigger (hourly)
-  → HTTP Request → https://www.reddit.com/r/technews/new.json
-  → Split Posts (splits array into individual items)
+  → RSS Feed Read → https://www.reddit.com/r/technews/new.rss
   → Format Discord Message (Set node)
   → Send to Discord (Discord node)
 ```
@@ -56,6 +55,5 @@ https://article-link.com
 |---|---|
 | Subreddit | `Get r/technews Posts` → URL (replace `technews`) |
 | Sort order | `Get r/technews Posts` → URL (change `new` to `hot` or `top`) |
-| Number of posts | `Get r/technews Posts` → Query param `limit` |
 | Run frequency | `Schedule Trigger` → `hoursInterval` |
 | Message format | `Format Discord Message` → `discordMessage` expression |

@@ -21,41 +21,11 @@
     {
       "id": "a1b2c3d4-0002-0002-0002-000000000002",
       "name": "Get r/technews Posts",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
       "position": [460, 300],
       "parameters": {
-        "method": "GET",
-        "url": "https://www.reddit.com/r/technews/new.json",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "User-Agent",
-              "value": "n8n-reddit-bot/1.0"
-            }
-          ]
-        },
-        "sendQuery": true,
-        "queryParameters": {
-          "parameters": [
-            {
-              "name": "limit",
-              "value": "5"
-            }
-          ]
-        },
-        "options": {}
-      }
-    },
-    {
-      "id": "a1b2c3d4-0005-0005-0005-000000000005",
-      "name": "Split Posts",
-      "type": "n8n-nodes-base.splitOut",
-      "typeVersion": 1,
-      "position": [680, 300],
-      "parameters": {
-        "fieldToSplitOut": "data.children",
+        "url": "https://www.reddit.com/r/technews/new.rss",
         "options": {}
       }
     },
@@ -64,7 +34,7 @@
       "name": "Format Discord Message",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [900, 300],
+      "position": [680, 300],
       "parameters": {
         "mode": "manual",
         "assignments": {
@@ -72,7 +42,7 @@
             {
               "id": "field-message",
               "name": "discordMessage",
-              "value": "=**{{ $json.data.title }}**\n\n{{ $json.data.url }}\n\n> Posted by u/{{ $json.data.author }} | {{ $json.data.score }} upvotes | {{ $json.data.num_comments }} comments\n> https://reddit.com{{ $json.data.permalink }}",
+              "value": "=**{{ $json.title }}**\n\n{{ $json.link }}\n\n> Posted by u/{{ $json.author }} | {{ $json.pubDate }}",
               "type": "string"
             }
           ]
@@ -85,7 +55,7 @@
       "name": "Send to Discord",
       "type": "n8n-nodes-base.discord",
       "typeVersion": 2,
-      "position": [1120, 300],
+      "position": [900, 300],
       "parameters": {
         "operation": "sendMessage",
         "resource": "message",
@@ -126,17 +96,6 @@
       "main": [
         [
           {
-            "node": "Split Posts",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Split Posts": {
-      "main": [
-        [
-          {
             "node": "Format Discord Message",
             "type": "main",
             "index": 0
@@ -169,7 +128,7 @@
     "instanceId": ""
   },
   "pinData": {},
-  "versionId": "a1b2c3d4-ffff-ffff-ffff-000000000001",
+  "versionId": "a1b2c3d4-ffff-ffff-ffff-000000000002",
   "triggerCount": 0,
   "tags": [
     {
