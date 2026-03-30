@@ -8,10 +8,15 @@ No Reddit credentials required — uses Reddit's public JSON API.
 
 ```
 Schedule Trigger (hourly)
-  → RSS Feed Read → https://www.reddit.com/r/technews/new.rss
+  → HTTP Request (browser User-Agent) → https://www.reddit.com/r/technews/new.rss
+  → Parse XML (XML node)
+  → Split Posts (one item per post)
   → Format Discord Message (Set node)
   → Send to Discord (Discord node)
 ```
+
+> The RSS Feed Read node is not used because it sends a bot User-Agent that Reddit blocks.
+> The HTTP Request node lets us set a browser User-Agent to bypass this.
 
 ## Setup
 
