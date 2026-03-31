@@ -74,22 +74,11 @@
     {
       "id": "a1b2c3d4-0003-0003-0003-000000000003",
       "name": "Format Discord Message",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [1120, 300],
       "parameters": {
-        "mode": "manual",
-        "assignments": {
-          "assignments": [
-            {
-              "id": "field-message",
-              "name": "discordMessage",
-              "value": "=**{{ $json.title }}**\n\n{{ $json.link[1].href }}\n\n> Posted by {{ $json.author.name }} | {{ $json.updated }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
+        "jsCode": "const d = $input.item.json;\n\n// title may be a string or array\nconst title = Array.isArray(d.title) ? d.title[0] : (d.title || 'No title');\n\n// link can be an object, array of objects, or string\n// attributes from xml2js land in a '$' key; some n8n versions flatten them\nlet link = '';\nif (d.link) {\n  const links = Array.isArray(d.link) ? d.link : [d.link];\n  const alt = links.find(l => (l.$ ? l.$.rel : l.rel) === 'alternate') || links[0];\n  link = alt.$ ? alt.$.href : (alt.href || String(alt));\n}\n\nconst author = d.author\n  ? (typeof d.author === 'string' ? d.author : (d.author.name || JSON.stringify(d.author)))\n  : 'unknown';\n\nconst updated = Array.isArray(d.updated) ? d.updated[0] : (d.updated || '');\n\nreturn [{ json: { discordMessage: `**${title}**\\n\\n${link}\\n\\n> Posted by ${author} | ${updated}` } }];"
       }
     },
     {
