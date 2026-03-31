@@ -93,11 +93,23 @@
       }
     },
     {
+      "id": "a1b2c3d4-0007-0007-0007-000000000007",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1230, 300],
+      "parameters": {
+        "unit": "seconds",
+        "amount": 1
+      },
+      "webhookId": "a1b2c3d4-0007-0007-0007-webhook000007"
+    },
+    {
       "id": "a1b2c3d4-0004-0004-0004-000000000004",
       "name": "Send to Discord",
       "type": "n8n-nodes-base.discord",
       "typeVersion": 2,
-      "position": [1340, 300],
+      "position": [1450, 300],
       "parameters": {
         "operation": "sendMessage",
         "resource": "message",
@@ -168,6 +180,17 @@
       ]
     },
     "Format Discord Message": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
       "main": [
         [
           {
