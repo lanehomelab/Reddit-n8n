@@ -72,11 +72,22 @@
       }
     },
     {
+      "id": "a1b2c3d4-0008-0008-0008-000000000008",
+      "name": "Loop Over Posts",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [1020, 300],
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      }
+    },
+    {
       "id": "a1b2c3d4-0003-0003-0003-000000000003",
       "name": "Format Discord Message",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [1120, 300],
+      "position": [1230, 300],
       "parameters": {
         "mode": "manual",
         "assignments": {
@@ -97,10 +108,11 @@
       "name": "Wait",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
-      "position": [1230, 300],
+      "position": [1340, 300],
       "parameters": {
+        "resume": "timeInterval",
         "unit": "seconds",
-        "amount": 1
+        "amount": 2
       },
       "webhookId": "a1b2c3d4-0007-0007-0007-webhook000007"
     },
@@ -172,11 +184,23 @@
       "main": [
         [
           {
-            "node": "Format Discord Message",
+            "node": "Loop Over Posts",
             "type": "main",
             "index": 0
           }
         ]
+      ]
+    },
+    "Loop Over Posts": {
+      "main": [
+        [
+          {
+            "node": "Format Discord Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
       ]
     },
     "Format Discord Message": {
@@ -200,6 +224,17 @@
           }
         ]
       ]
+    },
+    "Send to Discord": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -215,7 +250,7 @@
     "instanceId": ""
   },
   "pinData": {},
-  "versionId": "a1b2c3d4-ffff-ffff-ffff-000000000004",
+  "versionId": "a1b2c3d4-ffff-ffff-ffff-000000000005",
   "triggerCount": 0,
   "tags": [
     {
