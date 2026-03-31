@@ -84,7 +84,7 @@
             {
               "id": "field-message",
               "name": "discordMessage",
-              "value": "=**{{ $json.title }}**\n\n{{ $json.link[1].href }}\n\n> Posted by {{ $json.author.name }} | {{ $json.updated }}",
+              "value": "=**{{ $json.title }}**\n\n{{ $json.link.href }}\n\n> Posted by {{ $json.author.name }} | {{ $json.updated }}",
               "type": "string"
             }
           ]
