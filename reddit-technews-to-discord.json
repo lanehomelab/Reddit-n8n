@@ -67,7 +67,7 @@
       "typeVersion": 1,
       "position": [900, 300],
       "parameters": {
-        "fieldToSplitOut": "data.feed.entry",
+        "fieldToSplitOut": "feed.entry",
         "options": {}
       }
     },
@@ -84,7 +84,7 @@
             {
               "id": "field-message",
               "name": "discordMessage",
-              "value": "=**{{ $json.title[0] }}**\n\n{{ $json.link[0].$.href }}\n\n> Posted by {{ $json.author[0].name[0] }} | {{ $json.updated[0] }}",
+              "value": "=**{{ $json.title }}**\n\n{{ $json.link[1].href }}\n\n> Posted by {{ $json.author.name }} | {{ $json.updated }}",
               "type": "string"
             }
           ]
